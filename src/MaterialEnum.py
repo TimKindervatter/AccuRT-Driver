@@ -1,0 +1,22 @@
+from enum import Enum
+
+class Material(Enum):
+    AEROSOLS = 'aerosols'
+    BLOOD = 'blood'
+    CLOUD = 'cloud'
+    EARTH_ATMOSPHERIC_GASES = 'earth_atmospheric_gases'
+    FAT = 'fat'
+    ICE = 'ice'
+    INTRALIPID = 'intralipid'
+    KERATIN = 'keratin'
+    LAYER_USER_SPECIFIED = 'layer_user_specified'
+    LAYER_USER_SPECIFIED_HG = 'layer_user_specified_hg'
+    MELANOSOMES = 'melanosomes'
+    PURE_WATER = 'pure_water'
+    SNOW = 'snow'
+    TISSUE_BASE = 'tissue_base'
+    USER_SPECIFIED = 'user_specified'
+    VACUUM = 'vacuum'
+    WATER_IMPURITY_CCRR = 'water_impurity_ccrr'
+    WATER_IMPURITY_GSM = 'water_impurity_gsm'
+    WATER_PARTICLES = 'water_particles'
