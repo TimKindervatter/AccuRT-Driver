@@ -1,5 +1,5 @@
 class ConfigFile:
-    def __init__(self, template_config_name, clone_config_name) -> None:
+    def __init__(self, template_config_name, clone_config_name):
         self.template_name = template_config_name
         self.clone_name = clone_config_name
         self.template_file_handle = None
@@ -66,12 +66,12 @@ class ConfigFile:
     
 
 class MainConfigFile(ConfigFile):
-    def __init__(self, template_config_name, clone_config_name) -> None:
+    def __init__(self, template_config_name, clone_config_name):
         ConfigFile.__init__(self, template_config_name, clone_config_name)
 
 
 class MaterialConfigFile(ConfigFile):
-    def __init__(self, template_config_name, clone_config_name, material_enum) -> None:
+    def __init__(self, template_config_name, clone_config_name, material_enum):
             ConfigFile.__init__(self, template_config_name, clone_config_name)
             self.material_enum = material_enum
 
