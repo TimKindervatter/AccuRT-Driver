@@ -4,6 +4,8 @@ import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 
+os.chdir("/export/home/timothy/svn/c-disort/trunk/python/FinalExam/2b/2bii")
+
 accurt_python_driver_path = os.environ.get('ACCURT_PYTHON_DRIVER_PATH')
 sys.path.insert(1, accurt_python_driver_path)
 
@@ -18,13 +20,13 @@ template_config_name = "default"  # Change this to the name of the config file y
 
 
 # Programmatically set up text file(s) to be used for repeated runs (not needed if not using repeated run)
-config_file_type = ConfigFileType.MATERIAL
+repeated_run_file_location = ConfigFileType.MATERIAL # Determines whether repeated run file will be placed alongside the main config file or in the materials folder 
 
 brine_volume_fractions = np.arange(0.01, 0.06, 0.01)
 print(brine_volume_fractions.size)
 
 brine_volume_fractions_file_name = 'brine_volume_fractions.txt'
-brine_volume_fractions_file_handle = open_repeated_run_text_file(brine_volume_fractions_file_name, template_config_name, config_file_type)
+brine_volume_fractions_file_handle = open_repeated_run_text_file(brine_volume_fractions_file_name, template_config_name, repeated_run_file_location)
 
 for brine_volume_fraction in brine_volume_fractions:
     brine_volume_fractions_file_handle.write('1 ' + str(brine_volume_fraction) + ' 2 ' + str(brine_volume_fraction) + '\n')
@@ -56,14 +58,12 @@ ice_config_tags = {
     "BRINE_PROFILE" : brine_volume_fractions_file_name
 }
 
-
-# Print out the tags that will be changed from their default values. These values will print to the command line.
 tags_to_print = [main_config_tags, ice_config_tags]
-print_updated_tags(tags_to_print)
+print_updated_tags(tags_to_print)  # Print out the tags that will be changed from their default values. These values will print to the command line.
 
 
 # Create a "clone" of the template config file and Materials directory, but with modified tags according to those listed above.
-clone_name_suffix = ""  # If running in a loop, you may choose to add a suffix to each clone file/directory name to avoid overwriting the files/directories from previous loops
+clone_name_suffix = "" 
 clone_config_name = clone(template_config_name, clone_name_suffix)
 
 main_config_file = MainConfigFile(template_config_name, clone_config_name)
@@ -85,8 +85,8 @@ cosine_irradiances_total_downward = read_irradiance(downward_irradiances_filenam
 
 
 # Format data for plotting
-irradiances_above_surface = np.array([array[0] for array in cosine_irradiances_total_downward])
-irradiances_below_surface = np.array([array[1] for array in cosine_irradiances_total_downward])
+irradiances_above_surface = np.array([struct.irradiance[0] for struct in cosine_irradiances_total_downward])
+irradiances_below_surface = np.array([struct.irradiance[1] for struct in cosine_irradiances_total_downward])
 Delta_F_minus = irradiances_below_surface - irradiances_above_surface
 
 
