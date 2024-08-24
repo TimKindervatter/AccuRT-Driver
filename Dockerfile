@@ -49,6 +49,10 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 RUN mkdir /work
 WORKDIR /work
+
+# The /src folder of this repository should be in the same location of this Dockerfile after cloning from the GitHub repo, 
+# Copy /src into the Docker work folder so that it is accessible when the container is run
+RUN cp -r src/ work/src
   
 RUN apt-get install -y vim nano
 
