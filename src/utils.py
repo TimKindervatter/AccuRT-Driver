@@ -1,5 +1,6 @@
 import os, shutil
 import numpy as np
+from collections import deque
 
 from ConfigFileTypeEnum import ConfigFileType
 
@@ -58,13 +59,27 @@ def clone(template_name, clone_name_suffix = "") -> str:
 #     return irradiances
 
 class IrradianceStruct:
-    def __init__(self) -> None:
+    def __init__(self):
         self.nStreams = None
         self.nDepths = None
         self.nWavelengths = None
         self.depth = []
         self.wavelength = []
         self.irradiance = []
+
+
+class RadianceStruct:
+    def __init__(self):
+        self.nStreams = None
+        self.nDepths = None
+        self.nWavelengths = None
+        self.nPolarAngles = None
+        self.nAzimuthAngles = None
+        self.depth = []
+        self.wavelength = []
+        self.polarAngle = []
+        self.azimuthAngle = []
+        self.radiance = None
 
 
 def read_irradiance(file_name):
@@ -98,6 +113,56 @@ def read_irradiance(file_name):
             data.append(this_run_data)
 
     return data
+
+
+def read_radiance(file_name):
+    data = []
+
+    with open(file_name, 'r') as f:
+        line_1 = f.readlines(1)[0].strip()
+        n_runs = int(line_1)        
+
+        for i in range(n_runs):
+            this_run_data = RadianceStruct()
+
+            line_2 = f.readlines(1)[0].strip()
+            this_run_data.nStreams = int(line_2)
+
+            line_3 = f.readlines(1)[0].strip().split()
+            this_run_data.nDepths = int(line_3[0])
+            this_run_data.nWavelengths = int(line_3[1])
+            this_run_data.nPolarAngles = int(line_3[2])
+            this_run_data.nAzimuthAngles = int(line_3[3])
+
+            depths = f.readlines(1)[0].strip().split()
+            this_run_data.depth = [float(elem) for elem in depths]
+
+            wavelengths = f.readlines(1)[0].strip().split()
+            this_run_data.wavelength = [float(elem) for elem in wavelengths]
+
+            polar_angles = f.readlines(1)[0].strip().split()
+            this_run_data.polarAngle = [float(elem) for elem in polar_angles]
+
+            azimuth_angles = f.readlines(1)[0].strip().split()
+            this_run_data.azimuthAngle = [float(elem) for elem in azimuth_angles]
+
+            radiances = np.zeros((this_run_data.nDepths, this_run_data.nWavelengths, this_run_data.nPolarAngles, this_run_data.nAzimuthAngles))
+
+            radiance_line = f.readlines(1)[0].strip().split()
+            radiance_queue = deque(radiance_line)
+
+            for j in range(this_run_data.nDepths):
+                for k in range(this_run_data.nWavelengths):
+                    for l in range(this_run_data.nPolarAngles):
+                        for m in range(this_run_data.nAzimuthAngles):
+                            radiances[j, k, l, m] = radiance_queue.popleft()
+
+            this_run_data.radiance = radiances
+
+            data.append(this_run_data)
+
+    return data
+
 
 def extract_downward_radiances(clone_config_name):
     output_folder = clone_config_name + "Output"
