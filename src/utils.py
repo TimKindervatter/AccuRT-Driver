@@ -4,25 +4,27 @@ from collections import deque
 
 from ConfigFileTypeEnum import ConfigFileType
 
-def clone(template_name, clone_name_suffix = "") -> str:
-        clone_name = template_name + "_clone" + clone_name_suffix
+def clone(template_name, clone_name_suffix = "", destination = "./") -> str:
+        clone_name = os.path.basename(template_name) + "_clone" + clone_name_suffix
 
-        if os.path.isfile(clone_name):
-            os.remove(clone_name)
+        clone_full_path = destination + '/' + clone_name
 
-        shutil.copy(template_name, clone_name)
+        if os.path.isfile(clone_full_path):
+            os.remove(clone_full_path)
+
+        shutil.copy(template_name, clone_full_path)
 
         src  = template_name + "Materials"
-        dest = clone_name    + "Materials"
+        dest = clone_full_path    + "Materials"
 
         try:
             shutil.rmtree(dest)
         except OSError as e:
-            print ("Error: %s - %s." % (e.filename, e.strerror))
+            print("") # Do nothing
 
         shutil.copytree(src, dest)
 
-        return clone_name
+        return clone_full_path
 
 
 # def read_irradiance(file_name):
@@ -58,6 +60,19 @@ def clone(template_name, clone_name_suffix = "") -> str:
 
 #     return irradiances
 
+class IOPStruct:
+    def __init__(self):
+        self.nLayerDepths = None
+        self.nWavelengths = None
+        self.nPhaseMoments = None
+        self.layerDepths = []
+        self.wavelengths = []
+        self.totalOpticalDepths = []
+        self.absorptionCoefficients = []
+        self.scatteringCoefficients = []
+        self.scatteringScalingFactor = []
+        self.phaseMoments = []
+
 class IrradianceStruct:
     def __init__(self):
         self.nStreams = None
@@ -80,6 +95,48 @@ class RadianceStruct:
         self.polarAngle = []
         self.azimuthAngle = []
         self.radiance = None
+
+
+def read_IOPs(file_name):
+    data = []
+
+    with open(file_name, 'r') as f:
+        line_1 = f.readlines(1)[0].strip()
+        n_runs = int(line_1)
+
+        for run_number in range(n_runs):
+            this_run_data = IOPStruct()
+
+            line_2 = f.readlines(1)[0].strip().split()
+            this_run_data.nLayerDepths = int(line_2[0])
+            this_run_data.nWavelengths = int(line_2[1])
+            this_run_data.nPhaseMoments = int(line_2[2])
+
+            layer_depths = f.readlines(1)[0].strip().split()
+            this_run_data.layerDepths = [float(elem) for elem in layer_depths]
+
+            wavelengths = f.readlines(1)[0].strip().split()
+            this_run_data.wavelengths = [float(elem) for elem in wavelengths]
+
+            this_run_data.totalOpticalDepths = np.zeros((this_run_data.nLayerDepths, this_run_data.nWavelengths))
+            this_run_data.absorptionCoefficients = np.zeros((this_run_data.nLayerDepths, this_run_data.nWavelengths))
+            this_run_data.scatteringCoefficients = np.zeros((this_run_data.nLayerDepths, this_run_data.nWavelengths))
+            this_run_data.scatteringScalingFactor = np.zeros((this_run_data.nLayerDepths, this_run_data.nWavelengths))
+            this_run_data.phaseMoments = np.zeros((this_run_data.nLayerDepths, this_run_data.nWavelengths, this_run_data.nPhaseMoments))
+
+            for i in range(this_run_data.nLayerDepths):
+                for j in range(this_run_data.nWavelengths):
+                    next_line = f.readlines(1)[0].strip().split()
+
+                    this_run_data.totalOpticalDepths[i, j] = next_line[0]
+                    this_run_data.absorptionCoefficients[i, j] = next_line[1]
+                    this_run_data.scatteringCoefficients[i, j] = next_line[2]
+                    this_run_data.scatteringScalingFactor[i, j] = next_line[3]
+                    this_run_data.phaseMoments[i, j, :] = next_line[4:]
+
+            data.append(this_run_data)
+
+    return data
 
 
 def read_irradiance(file_name):
@@ -213,7 +270,8 @@ def copy_input_config_files(clone_config_name, output_folder):
 def run_accurt(clone_config_name):
     output_folder = clone_config_name + "Output"
 
-    cmd = "AccuRT " + clone_config_name + " | tee " + output_folder + "/AccuRT_terminal_output.txt"
+    # cmd = "AccuRT " + clone_config_name + " | tee " + output_folder + "/AccuRT_terminal_output.txt"
+    cmd = "AccuRT " + clone_config_name + " > " + os.path.dirname(clone_config_name) + "/AccuRT_terminal_output.txt"
         
     print("running cmd =", cmd)
 
