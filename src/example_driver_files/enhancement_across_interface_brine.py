@@ -4,8 +4,6 @@ import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-os.chdir("/export/home/timothy/svn/c-disort/trunk/python/FinalExam/2b/2bii")
-
 accurt_python_driver_path = os.environ.get('ACCURT_PYTHON_DRIVER_PATH')
 sys.path.insert(1, accurt_python_driver_path)
 
