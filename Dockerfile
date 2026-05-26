@@ -37,7 +37,7 @@ RUN python3 -m pip install matplotlib
 RUN python3 -m pip install pandas
 
 # Copy AccuRT into the Docker container
-COPY /source ~/accuRT/source
+COPY /source /accuRT/source
 
 # Set up environment variables relevant to AccuRT
 ENV ACCURT_PATH=/accuRT/source/trunk
@@ -55,7 +55,7 @@ WORKDIR /work
 RUN git clone https://github.com/TimKindervatter/AccuRT-Driver.git .
 
 # Set up environment variables relevant to the AccuRT Python driver
-ENV ACCURT_PYTHON_DRIVER_PATH=/work/python_driver/AccuRT-Driver/src
+ENV ACCURT_PYTHON_DRIVER_PATH=/work/AccuRT-Driver/src
 ENV PATH=${PATH}:${ACCURT_PYTHON_DRIVER_PATH}
 
 # The /src folder of this repository should be in the same location of this Dockerfile after cloning from the GitHub repo, 
