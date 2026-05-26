@@ -29,19 +29,20 @@ ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 
 
-ENV PYTHON_VERSION=3.6
+ENV PYTHON_VERSION=3.12
 RUN pyenv install ${PYTHON_VERSION}
 RUN pyenv global ${PYTHON_VERSION}
-RUN pip install numpy
-RUN pip install matplotlib
-RUN pip install pandas
+RUN python3 -m pip install numpy
+RUN python3 -m pip install matplotlib
+RUN python3 -m pip install pandas
 
+# Copy AccuRT into the Docker container
+COPY /source ~/accuRT/source
 
-COPY /source /accuRT/source
-
+# Set up environment variables relevant to AccuRT
 ENV ACCURT_PATH=/accuRT/source/trunk
-ENV LD_LIBRARY_PATH=$ACCURT_PATH/lib:/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH
-ENV PATH=$ACCURT_PATH/main:$PATH
+ENV LD_LIBRARY_PATH=${ACCURT_PATH}/lib:/usr/lib:/usr/local/lib:${LD_LIBRARY_PATH}
+ENV PATH=${ACCURT_PATH}/main:${PATH}
 
 # Avoid ascii errors when reading files in Python
 RUN apt-get install -y locales && locale-gen en_US.UTF-8
@@ -50,9 +51,16 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 RUN mkdir /work
 WORKDIR /work
 
+# Clone the latest version of the AccuRT Python Driver from GitHub
+RUN git clone https://github.com/TimKindervatter/AccuRT-Driver.git .
+
+# Set up environment variables relevant to the AccuRT Python driver
+ENV ACCURT_PYTHON_DRIVER_PATH=/work/python_driver/AccuRT-Driver/src
+ENV PATH=${PATH}:${ACCURT_PYTHON_DRIVER_PATH}
+
 # The /src folder of this repository should be in the same location of this Dockerfile after cloning from the GitHub repo, 
 # Copy /src into the Docker work folder so that it is accessible when the container is run
-RUN cp -r src/ work/src
+# RUN cp -r src/ work/src
   
 RUN apt-get install -y vim nano
 
