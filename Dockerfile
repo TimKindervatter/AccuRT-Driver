@@ -48,14 +48,13 @@ ENV PATH=${ACCURT_PATH}/main:${PATH}
 RUN apt-get install -y locales && locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-RUN mkdir /work
+# RUN mkdir /work
 WORKDIR /work
 
-# Clone the latest version of the AccuRT Python Driver from GitHub
-RUN git clone https://github.com/TimKindervatter/AccuRT-Driver.git .
+COPY /AccuRT-Driver /accuRT/AccuRT-Driver
 
 # Set up environment variables relevant to the AccuRT Python driver
-ENV ACCURT_PYTHON_DRIVER_PATH=/work/AccuRT-Driver/src
+ENV ACCURT_PYTHON_DRIVER_PATH=/accuRT/AccuRT-Driver/src
 ENV PATH=${PATH}:${ACCURT_PYTHON_DRIVER_PATH}
 
 # The /src folder of this repository should be in the same location of this Dockerfile after cloning from the GitHub repo, 
