@@ -48,7 +48,7 @@ ENV PATH=${ACCURT_PATH}/main:${PATH}
 RUN apt-get install -y locales && locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
-# RUN mkdir /work
+RUN mkdir /work
 WORKDIR /work
 
 COPY /src /accuRT/AccuRT-Driver/src
@@ -63,12 +63,12 @@ ENV PATH=${PATH}:${ACCURT_PYTHON_DRIVER_PATH}
   
 RUN apt-get install -y vim nano
 
-RUN pip install jupyter
+# RUN pip install jupyter
 
 ENV PORT=8000
 EXPOSE 8000 8000
 
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8000", "--no-browser", "--allow-root"]
+# CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8000", "--no-browser", "--allow-root"]
 # CMD npm run start
 # CMD npm run debug
 # CMD tail -f /dev/null
