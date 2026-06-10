@@ -1,0 +1,23 @@
+usage: 	AccuRT [configName]
+ or	AccuRT -g [configName]
+ or	AccuRT --template=[template] [configName]
+
+AccuRT calculates radiative energies for main configuration file [configName] and
+associated material files contained in the directory [configNameMaterials].
+All output will be contained in the directory [configNameOutput].
+
+options:
+ -g				generate default template configuration file
+ --template=[templateName]	generate pre-defined template (see below)
+
+templates:
+ atmOcean			atmosphere ocean template (default)
+ cimel				example cimel (handheld) template
+ vanDeHulst			Van De Hulst template for testing
+ repeatedRuns			example of repeated runs varying solar zenith angle, ozone
+
+examples:
+ AccuRT -g test01
+ AccuRT test01
+ AccuRT --template=repeatedRuns ozonetest01
+ AccuRT ozonetest01

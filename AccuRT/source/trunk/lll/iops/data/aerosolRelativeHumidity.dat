@@ -1,0 +1,37 @@
+# From Hänel 1976, see SF79
+# Model 1, Average aerosol in summer 1966 at Mainz
+# Model 2, Sea-spray aerosol
+# Model 3, Maritime aerosol over the Atlantic, 13-16 April 1969
+# Model 4, Maritime aerosol over the Atlantic containing Saharan dust, 16-25 April 1969
+# Model 5, Urban aerosol at Mainz in January 1970
+# Model 6, Aerosol on top of the Hohenpeissenberg, elevation 1000 m above MSL 
+#  in the foothills of the Alps, in summer 1970.
+# The SF79 maritime model uses Hänel's Model 2 (Sea-spray aerosol), SF79 p26.
+# The SF79 tropospheric model has the same composition as the SF79 rural model, SF79 p30, 
+#  which uses Hänel's Model 6 (Aerosol on top of Hohenpeissenberg), SF79 p12.
+# The mean density of the dry aerosol, \rho_0 is given in Table 5 for each model (p116).
+# SeaDAS model uses model 6 (fine) and model 2 (coarse)
+# For the mean density of water, we assume \rho_w = 1 gm/cm^3 = 1 kg/L.
+# MODEL 2 (COARSE MODE)		MODEL 3 (MARITIME)		MODEL 6 (FINE MODE)
+# \rho_0 = 2.25			\rho_0 = 2.45			\rho_0 = 1.85
+# a_w (Rh)	m_w/m_0		a_w (Rh)	m_w/m_0		a_w (Rh)	m_w/m_0
+0		0		0		0		0		0
+1e-10		1e-10           1e-10		1e-10		1e-10		1e-10
+0.3		1e-10		0.204		0.008		0.231           0.008
+0.35		0.012		0.305		0.011		0.301           0.011
+0.4		0.060		0.399		0.018		0.394           0.018
+0.5		0.108		0.497		0.030		0.485           0.030
+0.6		0.204		0.557		0.039		0.544           0.044
+0.65		0.301		0.604		0.064		0.590           0.058
+0.7		0.504		0.653		0.145		0.625           0.070
+0.725		0.722		0.710		0.379		0.677           0.094
+0.742		2.450		0.772		1.249		0.731           0.152
+0.790		2.943		0.834		1.648		0.768           0.397
+0.852		4.018		0.900		2.520		0.827           0.765
+0.9053		5.899		0.950		4.617		0.885           1.154
+0.9478		9.950		0.962		5.924		0.950           1.995
+0.9714		17.38		0.975		8.775		0.972           3.576
+0.9819		26.56		0.986		14.86		0.986           8.099
+0.99159		54.01		0.99		20.39		0.99            11.58
+0.9958		108.6		0.9969		66.57		0.9969          42.13
+1.0		1000000000	1.0		1000000000	1.0             1000000000

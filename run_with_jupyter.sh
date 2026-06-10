@@ -1,0 +1,1 @@
+docker run -p 8000:8000 accurt_binary_atmocean
