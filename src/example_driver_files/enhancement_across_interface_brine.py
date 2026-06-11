@@ -60,12 +60,14 @@ for i, brine_volume_fraction in enumerate(brine_volume_fractions):
     # Open an output file that was generated in the Output directory and read the values out of it
     output_folder = clone_config_name + "Output"
     downward_irradiances_filename = output_folder + "/cosine_irradiance_total_downward.txt"
-    cosine_irradiances_total_downward = read_irradiance(downward_irradiances_filename)
 
+    # Returns a list of structs containing the irradiance output data for each repeated run
+    cosine_irradiances_total_downward_list = read_irradiance(downward_irradiances_filename)
 
     # Format data for plotting
-    irradiances_above_surface.append(cosine_irradiances_total_downward.irradiance[0])
-    irradiances_below_surface.append(cosine_irradiances_total_downward.irradiance[1])
+    for cosine_irradiances_total_downward in cosine_irradiances_total_downward_list:
+        irradiances_above_surface.append(cosine_irradiances_total_downward.irradiance[0])
+        irradiances_below_surface.append(cosine_irradiances_total_downward.irradiance[1])
     
     
 Delta_F_minus = np.array(irradiances_below_surface) - np.array(irradiances_above_surface)
