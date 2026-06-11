@@ -52,6 +52,7 @@ RUN mkdir /work
 WORKDIR /work
 
 COPY /src /accuRT/AccuRT-Driver/src
+RUN cp -r /accuRT/AccuRT-Driver/src/example_driver_files /work
 
 # Set up environment variables relevant to the AccuRT Python driver
 ENV ACCURT_PYTHON_DRIVER_PATH=/accuRT/AccuRT-Driver/src
