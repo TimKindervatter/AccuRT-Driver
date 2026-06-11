@@ -1,3 +1,6 @@
+from MaterialEnum import Material
+from utils import clone
+
 class ConfigFile:
     def __init__(self, template_config_name, clone_config_name):
         self.template_name = template_config_name
@@ -73,7 +76,99 @@ class MainConfigFile(ConfigFile):
 class MaterialConfigFile(ConfigFile):
     def __init__(self, template_config_name, clone_config_name, material_enum):
             ConfigFile.__init__(self, template_config_name, clone_config_name)
-            self.material_enum = material_enum
+            self.material = material_enum
 
             self.template_name = self.template_name + "Materials/" + self.material_enum.value
             self.clone_name    = self.clone_name + "Materials/" + self.material_enum.value
+
+
+class ConfigFileCopier:
+    def __init__(self, template_config_name, clone_name_suffix=""):
+        self.template_config_name = template_config_name
+        self.clone_config_name = clone(template_config_name, clone_name_suffix)
+
+
+    def updateMainConfigTags(self, config_tags):
+        config_file = MainConfigFile(self.template_config_name, self.clone_config_name)
+        config_file.updateTags(config_tags)
+
+    
+    def updateMaterialConfigTags(self, config_tags, material_type):
+        config_file = MaterialConfigFile(self.template_config_name, self.clone_config_name, material_type)
+        config_file.updateTags(config_tags)
+
+
+    def updateAerosolsConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.AEROSOLS)
+
+
+    def updateBloodConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.BLOOD)
+
+
+    def updateCloudConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.CLOUD)
+
+
+    def updateEarthAtmosphericGasesConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.EARTH_ATMOSPHERIC_GASES)
+
+
+    def updateFatConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.FAT)
+
+
+    def updateIceConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.ICE)
+
+
+    def updateIntralipidConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.INTRALIPID)
+
+
+    def updateKeratinConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.KERATIN)
+
+
+    def updateLayerUserSpecifiedConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.LAYER_USER_SPECIFIED)
+
+
+    def updateLayerUserSpecifiedHGConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.LAYER_USER_SPECIFIED_HG)
+
+
+    def updateMelanosomesConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.MELANOSOMES)
+
+
+    def updatePureWaterConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.PURE_WATER)
+
+
+    def updateSnowConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.SNOW)
+
+
+    def updateTissueBaseConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.TISSUE_BASE)
+
+
+    def updateUserSpecifiedConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.USER_SPECIFIED)
+
+
+    def updateVacuumConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.VACUUM)
+
+
+    def updateWaterImpurityCCRRConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.WATER_IMPURITY_CCRR)
+
+
+    def updateWaterImpurityGSMConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.WATER_IMPURITY_GSM)
+
+
+    def updateWaterParticlesConfigTags(self, config_tags):
+        self.updateMaterialConfigTags(config_tags, Material.WATER_PARTICLES)
