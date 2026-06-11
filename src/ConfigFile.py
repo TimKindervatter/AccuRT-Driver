@@ -74,12 +74,12 @@ class MainConfigFile(ConfigFile):
 
 
 class MaterialConfigFile(ConfigFile):
-    def __init__(self, template_config_name, clone_config_name, material_enum):
+    def __init__(self, template_config_name, clone_config_name, material_type):
             ConfigFile.__init__(self, template_config_name, clone_config_name)
-            self.material = material_enum
+            self.material_type = material_type
 
-            self.template_name = self.template_name + "Materials/" + self.material_enum.value
-            self.clone_name    = self.clone_name + "Materials/" + self.material_enum.value
+            self.template_name = self.template_name + "Materials/" + self.material_type.value
+            self.clone_name    = self.clone_name + "Materials/" + self.material_type.value
 
 
 class ConfigFileCopier:
